@@ -1,6 +1,6 @@
 {% extends 'layouts.html' %}
 {% load static %}
-
+{% load humanize %}
 {% block content %}
 
 <div class="container">
@@ -12,16 +12,16 @@
                 <a href="#"><img class="card-img-top" src="{{product.image.url}}" alt=""></a>
                 <div class="card-body">
                     <h4 class="card-title">
-                    <a href="#">{{product.name}}</a>
+                    <a href="{{product.get_url}}">{{product.name}}</a>
                     </h4>
-                    <h5>{{product.price}}</h5>
-                    <p class="card-text">{{product.description}}</p>
+                    <h5>฿ {{product.price | intcomma}}</h5>
+                    <!-- <p class="card-text">{{product.description}}</p> -->
                 </div>
                 <div class="card-footer">
                     {% if product.stock <= 0 %}
                         <h5 class="text-danger">สินค้าหมด</h5>
                     {% else %}
-                        <a href="#" class="btn btn-primary">เพิ่มลงตะกร้า</a>
+                        <a href="{% url 'addCart' product.id %}" class="btn btn-primary">เพิ่มลงตะกร้า</a>
                     {% endif %}
                     <!-- <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small> -->
                 </div>
