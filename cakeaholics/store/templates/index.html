@@ -9,7 +9,7 @@
         {% if product.image %}
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="card h-100">
-                <a href="#"><img class="card-img-top" src="{{product.image.url}}" alt=""></a>
+                <a href="{{product.get_url}}"><img class="card-img-top" src="{{product.image.url}}" alt=""  width="338px" height="338px"></a>
                 <div class="card-body">
                     <h4 class="card-title">
                     <a href="{{product.get_url}}">{{product.name}}</a>

@@ -1,4 +1,4 @@
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render,get_object_or_404,redirect
 from store.models import Category,Product,Cart,CartItem
 # from django.http import HttpResponse
 
@@ -52,10 +52,40 @@ def addCart(request,product_id):
             cart_item.save()
     except CartItem.DoesNotExist:
         #บันทึกลงฐานข้อมูล
-        cart_item=CartItem.create(
+        cart_item=CartItem.objects.create(
             product=product,
             cart=cart,
             quantity=1
         )
         cart_item.save()
+    
+    return redirect('/')
+
+def cartdetail(request):
+    total=0
+    counter=0
+    cart_items=None
+    try:
+        cart=Cart.objects.get(cart_id=_cart_id(request)) #ดึงตะกร้า
+        cart_items=CartItem.objects.filter(cart=cart,active=True) #Nดึงข้อมูลสินค้าในคะกร้า
+        for item in cart_items:
+            total += (item.product.price * item.quantity)
+            counter += item.quantity
+    except Exception as e :
+        pass
+    return render(request, 'cartdetail.html', 
+    dict(cart_items=cart_items,total=total,counter=counter))
+
+def removeCart(request, product_id):
+    #ทำงานกับตะกร้าสินค้า A
+    cart=Cart.objects.get(cart_id=_cart_id(request))
+    #ทำงานกับสินค้าที่จะลบ 1
+    product=get_object_or_404(Product,id=product_id)
+    cartItem=CartItem.objects.get(product=product,cart=cart)
+    #ลบรายการสินค้า 1 ออกจากตะกร้า A โดยลบจากรายการสินค้าในตะกร้า (CartItem)
+    cartItem.delete()
+    return redirect('cartdetail')
+
+def signUpView(request):
+    return render(request,'signup.html')
     
