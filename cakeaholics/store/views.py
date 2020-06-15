@@ -1,5 +1,7 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from store.models import Category,Product,Cart,CartItem
+from store.forms import SignUpForm
+from django.contrib.auth.models import Group,User
 # from django.http import HttpResponse
 
 # Create your views here.
@@ -87,5 +89,22 @@ def removeCart(request, product_id):
     return redirect('cartdetail')
 
 def signUpView(request):
-    return render(request,'signup.html')
+    if request.method=='POST':
+        form=SignUpForm(request.POST)
+        if form.is_valid():
+            #บันทึกข้อมูล User
+            form.save()
+            #บันทึก Group Customer
+            #ดึง username จากแบบฟอร์มมาใช้
+            username=form.cleaned_data.get('username')
+            #ดึงข้อมูล user จากฐานข้อมูล
+            signUpUser=User.objects.get(username=username)
+            #จัด Group
+            customer_group=Group.objects.get(name="Customer")
+            customer_group.user_set.add(signUpUser)
+    else:
+        form=SignUpForm()
+    return render(request,'signup.html',{'form':form})
     
+def signInView(request):
+    return render(request,'signin.html')
