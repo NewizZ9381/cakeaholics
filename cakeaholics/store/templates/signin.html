@@ -4,6 +4,11 @@
 
 <div class="container">
     <h2 align="center">ลงชื่อเข้าใช้ระบบ</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{form | crispy}}
+        <input type="submit" class="btn btn-success" value="Login">
+    </form>
 </div>
 
 {% endblock %}

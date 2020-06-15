@@ -30,6 +30,19 @@
         {% endif %}
     {% endfor %}
     </div>
+    <nav aria-label="pagination">
+        {% if products.paginator.num_pages > 1 %}
+        <ul class="pagination">
+            {% for page_number in products.paginator.page_range %}
+            <li class="page-item
+            {% if products.number == page_number %}
+                active                
+            {% endif %}
+            "><a class="page-link" href="?page={{page_number}}">{{page_number}}</a></li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+      </nav>
 </div>
 
 {% endblock %}

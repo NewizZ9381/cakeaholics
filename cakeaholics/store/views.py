@@ -2,6 +2,9 @@ from django.shortcuts import render,get_object_or_404,redirect
 from store.models import Category,Product,Cart,CartItem
 from store.forms import SignUpForm
 from django.contrib.auth.models import Group,User
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import login,authenticate,logout
+from django.core.paginator import Paginator,EmptyPage,InvalidPage
 # from django.http import HttpResponse
 
 # Create your views here.
@@ -14,7 +17,20 @@ def index(request,category_slug=None):
     else :
         products=Product.objects.all().filter(available=True)
 
-    return render(request, 'index.html',{'products':products,'category':category_page})
+    #12 / 4 = 3
+    paginator=Paginator(products,3)
+    try:
+        page=int(request.GET.get('page','1'))
+    except:
+        page=1
+
+    try:
+        productperPage=paginator.page(page)
+    except (EmptyPage,InvalidPage):
+        productperPage=paginator.page(paginator.num_pages)
+
+
+    return render(request, 'index.html',{'products':productperPage,'category':category_page})
 
 def productPage(request,category_slug,product_slug):
     try:
@@ -107,4 +123,22 @@ def signUpView(request):
     return render(request,'signup.html',{'form':form})
     
 def signInView(request):
-    return render(request,'signin.html')
+    if request.method=='POST':
+        form=AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            username=request.POST['username']
+            password=request.POST['password']
+            user=authenticate(username=username,password=password)
+            if user is not None:
+                login(request,user)
+                return redirect('home')
+            else:
+                return redirect('signUp')
+    else:
+        form=AuthenticationForm()
+    return render(request,'signin.html',{'form':form})
+
+def signOutView(request):
+    logout(request)
+    return redirect('signIn')
+
