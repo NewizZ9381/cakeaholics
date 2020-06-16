@@ -31,6 +31,8 @@ urlpatterns = [
     path('account/create',views.signUpView,name="signUp"),
     path('account/login',views.signInView,name="signIn"),
     path('account/logout',views.signOutView,name="signOut"),
+    path('search/',views.search,name="search"),
+    path('orderHistory/',views.orderHistory,name="orderHistory")
 ]
 
 # product/waffle/wafflebanana

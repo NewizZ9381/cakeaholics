@@ -15,7 +15,7 @@
                     <a href="{{product.get_url}}">{{product.name}}</a>
                     </h4>
                     <h5>฿ {{product.price | intcomma}}</h5>
-                    <!-- <p class="card-text">{{product.description}}</p> -->
+                    <p class="card-text">{{product.description | slice:":70"}}</p>
                 </div>
                 <div class="card-footer">
                     {% if product.stock <= 0 %}

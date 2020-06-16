@@ -1,10 +1,13 @@
 from django.shortcuts import render,get_object_or_404,redirect
-from store.models import Category,Product,Cart,CartItem
+from store.models import Category,Product,Cart,CartItem,Order,OrderItem
 from store.forms import SignUpForm
 from django.contrib.auth.models import Group,User
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login,authenticate,logout
 from django.core.paginator import Paginator,EmptyPage,InvalidPage
+from django.contrib.auth.decorators import login_required
+from django.conf import settings
+import stripe
 # from django.http import HttpResponse
 
 # Create your views here.
@@ -45,6 +48,7 @@ def _cart_id(request):
         cart=request.session.create()
     return cart
 
+@login_required(login_url='signIn')
 def addCart(request,product_id):
     #รหัสสินค้า
     #ดึงสินค้าตามรหัสที่ส่งมา
@@ -91,8 +95,70 @@ def cartdetail(request):
             counter += item.quantity
     except Exception as e :
         pass
+
+    stripe.api_key=settings.SECRET_KEY
+    stripe_total=int(total*100)
+    description="Payment Online"
+    data_key=settings.PUBLIC_KEY
+
+    if request.method=="POST":
+        try:
+            token=request.POST['stripeToken']
+            email=request.POST['stripeEmail']
+            name=request.POST['stripeBillingName']
+            address=request.POST['stripeShippingAddressLine1']
+            city=request.POST['stripeShippingAddressCity']
+            postcode=request.POST['stripeShippingAddressZip']
+
+            # print(request.POST)
+
+            customer=stripe.Customer.create(
+                email=email,
+                source=token
+            )
+            charge=stripe.Charge.create(
+                amount=stripe_total,
+                currency='thb',
+                description=description,
+                customer=customer.id
+            )
+
+            #บันทึกข้อมูลใบสั่งซื้อ
+            order=Order.objects.create(
+                name=name,
+                address=address,
+                city=city,
+                postcode=postcode,
+                total=total,
+                email=email,
+                token=token
+            )
+            order.save()
+
+            #บันทึกรายการสั่งซื้อ
+            for item in cart_items:
+                order_item=OrderItem.objects.create(
+                    product=item.product.name,
+                    quantity=item.quantity,
+                    price=item.product.price,
+                    order=order
+                )
+                order_item.save()
+                # ลดจำนวน Stock
+                product=Product.objects.get(id=item.product.id)
+                product.stock=int(item.product.stock-order_item.quantity)
+                product.save()
+                item.delete()
+            return redirect('home')
+
+        except stripe.error.CardError as e :
+            return False, e
+
     return render(request, 'cartdetail.html', 
-    dict(cart_items=cart_items,total=total,counter=counter))
+    dict(cart_items=cart_items,total=total,counter=counter,
+    data_key=data_key,
+    stripe_total=stripe_total,
+    description=description))
 
 def removeCart(request, product_id):
     #ทำงานกับตะกร้าสินค้า A
@@ -142,3 +208,12 @@ def signOutView(request):
     logout(request)
     return redirect('signIn')
 
+def search(request):
+    products=Product.objects.filter(name__contains=request.GET['title'])
+    return render(request, 'index.html',{'products':products})
+
+def orderHistory(request):
+    if request.user.is_authenticated:
+        email=str(request.user.email)
+        orders=Order.objects.filter(email=email)
+    return render(request,'orders.html',{'orders':orders})
