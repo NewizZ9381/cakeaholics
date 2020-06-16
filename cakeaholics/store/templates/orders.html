@@ -33,7 +33,7 @@
                             <p class="cart_total_price">{{item.total | intcomma}}</p>
                         </td>
                         <td class="cart_total">
-                            <a href="#" class="btn btn-success">รายละเอียด</a>
+                            <a href="{% url 'orderDetails' item.id %}" class="btn btn-success">รายละเอียด</a>
                         </td>
                     </tr>
                     {% endfor %}
