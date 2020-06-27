@@ -1,0 +1,147 @@
+/* <style type="text/css"> */
+body{
+line-height: 1.4;
+font: 400 15px 'roboto', sans-serif;
+letter-spacing: 0.5px;
+color: #333;
+}
+
+a{
+    outline: none;
+    color: rgb(177, 6, 6);
+    text-decoration: none;
+}
+
+a:hover, a:focus{
+    color: #661c19;
+    text-decoration: none;
+}
+
+/* Style Header */
+.bg-header{
+    background: url(/static/media/web/bg.jpg) no-repeat fixed;
+    background-size: cover;
+    /* min-height: 430px; */
+    position: relative;
+    padding: 0;
+}
+
+/* Navbar */
+.navbar{
+    background: linear-gradient(to top, #fecccf,#ffffff);
+    /* background-color: #fecccf; */
+}
+
+.navbar-brand>img{
+    height: 45px
+}
+
+/* .nav-link {
+    color: black !important;
+} */
+
+/* .navbar{
+    padding: 3px 16px;  
+} Top-Bottom Left-Right */
+    
+.navbar .navbar-nav .active{
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.navbar-nav>li>a{
+    font-size: 18px;
+    font-weight: 600;
+    color: rgb(177, 6, 6) !important;
+    outline: none;
+}
+
+.navb
+
+.active{
+    opacity: 1;
+}
+
+.navbar-nav .nav-item .nav-link{
+    transition: 0.3s ease;
+    color: #BE2525 !important;
+}
+
+.navbar-nav .nav-item .nav-link:hover{
+    transition: 0.3s ease;
+    font-size: 18px;
+    font-weight: 800;
+    color: #661c19 !important;
+}
+
+.navbar-light .navbar-toggler:hover, .navbar .navbar-toggler:active{
+    background-color: rgba(0,0,0,0.2);
+    
+}
+
+.navbar-light .navbar-nav .nav-link.active{
+    color: #661c19;
+    font-weight: 800;
+}
+
+button:hover{
+    background-color: #fecccf !important;
+}
+
+button:focus{
+    outline: none;
+    background-color: rgba(255,255,255,0.1);
+}
+
+/* Pagination */
+.pagination > li > a
+{
+    background-color: white;
+    color: #661c19;
+}
+
+.pagination > li > a:focus,
+.pagination > li > a:hover,
+.pagination > li > span:focus,
+.pagination > li > span:hover
+{
+    color: #5a5a5a;
+    background-color: #eee;
+    border-color: #ddd;
+}
+
+.pagination > .active > a
+{
+    color: #661c19 !important;
+    background-color: #fecccf !Important;
+    border: solid 1px #fecccf !Important;
+}
+
+.pagination > .active > a:hover
+{
+    background-color: #fecccf !Important;
+    border: solid 1px #fecccf;
+}
+
+/* Products Row */
+.products-row{
+    margin-top: 10px;
+}
+
+/* Card */
+.card{
+    /* border: 1px solid #fecccf; */
+    /* line-height: 40px; */
+    /* border-radius: 2%; */
+}
+
+.card{
+    /* margin-bottom: 15px; */
+    transition: 0.3s ease;
+}
+
+.card:hover{
+    /* box-shadow: 0 10px 40px 0 rgba(0,0,0,0.5); */
+    box-shadow: 0 10px 40px 0 #ff959c;
+    transition: 0.3s ease;
+}
