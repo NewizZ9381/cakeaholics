@@ -21,7 +21,7 @@ def index(request,category_slug=None):
         products=Product.objects.all().filter(available=True)
 
     #12 / 4 = 3
-    paginator=Paginator(products,3)
+    paginator=Paginator(products,20)
     try:
         page=int(request.GET.get('page','1'))
     except:
