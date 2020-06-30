@@ -145,13 +145,3 @@ button:focus{
     box-shadow: 0 10px 40px 0 #ff959c;
     transition: 0.3s ease;
 }
-
-button.stripe-button-el,
-button.stripe-button-el>span {
-  background-color: #EB649C !important;
-  background-image: none;
-}
-
-/* .jumbotron {
-    background-color:transparent !important;
-} */
